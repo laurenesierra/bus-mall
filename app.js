@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 var allProducts = [];
 var renderQueue = [];
 var maxClicksAllowed = 25;
@@ -13,7 +11,6 @@ var imageTwoElement = document.getElementById('image-two');
 var imageThreeElement = document.getElementById('image-three');
 var resultsList = document.getElementById('results');
 
-
 function Product(name, src) {
   this.name = name;
   this.src = `img/${name}.${src}`;
@@ -22,34 +19,33 @@ function Product(name, src) {
   allProducts.push(this);
 }
 
-new Product('bag', 'jpg');
-new Product('banana', 'jpg');
-new Product('bathroom', 'jpg');
-new Product('boots', 'jpg');
-new Product('breakfast', 'jpg');
-new Product('bubbleGum', 'jpg');
-new Product('chair', 'jpg');
-new Product('cthulhu', 'jpg');
-new Product('dog-duck', 'jpg');
-new Product('dragon', 'jpg');
+new Product('usb', 'gif');
 new Product('pen', 'jpg');
-new Product('pet-sweep', 'jpg');
-new Product('scissors', 'jpg');
+new Product('bag', 'jpg');
 new Product('shark', 'jpg');
 new Product('sweep', 'png');
-new Product('tauntaun', 'jpg');
+new Product('boots', 'jpg');
+new Product('chair', 'jpg');
+new Product('dragon', 'jpg');
+new Product('banana', 'jpg');
+new Product('cthulhu', 'jpg');
 new Product('unicorn', 'jpg');
-new Product('usb', 'gif');
+new Product('dog-duck', 'jpg');
+new Product('bathroom', 'jpg');
+new Product('tauntaun', 'jpg');
+new Product('scissors', 'jpg');
+new Product('breakfast', 'jpg');
+new Product('bubbleGum', 'jpg');
 new Product('water-can', 'jpg');
+new Product('pet-sweep', 'jpg');
 new Product('wine-glass', 'jpg');
 
 function getRandomIndex(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-
 function renderProducts() {
-  while (renderQueue.length < 3) {
+  while (renderQueue.length < 6) {
     var tempindex = getRandomIndex(allProducts.length);
     while (renderQueue.includes(tempindex)) {
       tempindex = getRandomIndex(allProducts.length);
@@ -57,9 +53,9 @@ function renderProducts() {
     renderQueue.push(tempindex);
   }
 
-  var productOneIndex = renderQueue.pop();
-  var productTwoIndex = renderQueue.pop();
-  var productThreeIndex = renderQueue.pop();
+  var productOneIndex = renderQueue.shift();
+  var productTwoIndex = renderQueue.shift();
+  var productThreeIndex = renderQueue.shift();
 
   imageOneElement.src = allProducts[productOneIndex].src;
   imageOneElement.alt = allProducts[productOneIndex].name;
@@ -92,11 +88,9 @@ function handleClick(event) {
 
   if (actualClicks === maxClicksAllowed) {
     myContainer.removeEventListener('click', handleClick);
-    for (var j = 0; j < allProducts.length; j++) {
-      var liElement = document.createElement('li');
-      liElement.textContent = `${allProducts[j].name} was viewed ${allProducts[j].views} times and clicked ${allProducts[j].votes} times`;
-      resultsList.appendChild(liElement);
-    }
+
+    renderChart();
+
   }
 }
 
@@ -108,9 +102,9 @@ function renderChart() {
   var viewsArray = [];
 
   for (var i = 0; i < allProducts.length; i++){
-    namesArray.push(allGoats[i].name);
-    votesArray.push(allGoats[i].votes);
-    viewsArray.push(allGoats[i].views);
+    namesArray.push(allProducts[i].name);
+    votesArray.push(allProducts[i].votes);
+    viewsArray.push(allProducts[i].views);
   }
 
 var ctx = document.getElementById('myChart').getContext('2d');
@@ -121,26 +115,20 @@ var dataObject = {
         datasets: [{
             label: 'Number of Votes',
             data: votesArray,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(54, 99, 132, 1)',
-            borderWidth: 5
-        },
-        {
-          label: 'NumberOfVotes',
-          data: votesArray,
-          backroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 5
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgb(229, 43, 80)',
+            borderWidth: 3
         },
     {
 
-      label: 'NumberOfViews',
-      data: votesArray,
+      label: 'Number of Views',
+      data: viewsArray,
       backroundColor: 'rgba(153, 102, 255, 0.2)',
-        borderColor: 'rgba(153, 102, 255, 1)',
-        borderWidth: 2
+        borderColor: 'rgb(39, 59, 226)',
+        borderWidth: 3
     }]
   },
+  
     options: {
       resposive: false,
         scales: {
