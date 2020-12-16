@@ -19,6 +19,14 @@ function Product(name, src) {
   allProducts.push(this);
 }
 
+Product.prototype.logger = function() {
+}
+
+var retrievedProducts = localStorage.getItem('products');
+if(retrievedProducts) {
+  allProducts = JSON.parse(retrievedProducts); 
+} else {
+  
 new Product('usb', 'gif');
 new Product('pen', 'jpg');
 new Product('bag', 'jpg');
@@ -39,6 +47,8 @@ new Product('bubbleGum', 'jpg');
 new Product('water-can', 'jpg');
 new Product('pet-sweep', 'jpg');
 new Product('wine-glass', 'jpg');
+
+}
 
 function getRandomIndex(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -90,7 +100,9 @@ function handleClick(event) {
     myContainer.removeEventListener('click', handleClick);
 
     renderChart();
-
+   
+    var stringifiedProducts = JSON.stringify(allProducts);
+    localStorage.setItem('products', stringifiedProducts);
   }
 }
 
