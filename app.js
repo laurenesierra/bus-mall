@@ -3,6 +3,7 @@
 
 
 var allProducts = [];
+var renderQueue = [];
 var maxClicksAllowed = 25;
 var actualClicks = 0;
 
@@ -14,11 +15,11 @@ var resultsList = document.getElementById('results');
 
 
 function Product(name, src) {
-this.name = name; 
-this.src = `img/${name}.${src}`;
-this.views = 0;
-this.votes = 0;
-allProducts.push(this);
+  this.name = name;
+  this.src = `img/${name}.${src}`;
+  this.views = 0;
+  this.votes = 0;
+  allProducts.push(this);
 }
 
 new Product('bag', 'jpg');
@@ -48,45 +49,57 @@ function getRandomIndex(max) {
 
 
 function renderProducts() {
-  var productOneIndex = getRandomIndex(allProducts.length);
-  var productTwoIndex = getRandomIndex(allProducts.length);
-  var productThreeIndex = getRandomIndex(allProducts.length);
+  while (renderQueue.length < 3) {
+    var tempindex = getRandomIndex(allProducts.length);
+    while (renderQueue.includes(tempindex)) {
+      tempindex = getRandomIndex(allProducts.length);
+    }
+    renderQueue.push(tempindex);
+  }
 
-imageOneElement.src = allProducts[productOneIndex].src;
-imageOneElement.alt = allProducts[productOneIndex].name;
-imageOneElement.title = allProducts[productOneIndex].name;
-allProducts[productOneIndex].views++;
+  var productOneIndex = renderQueue.pop();
+  var productTwoIndex = renderQueue.pop();
+  var productThreeIndex = renderQueue.pop();
 
-imageTwoElement.src = allProducts[productTwoIndex].src;
-imageTwoElement.alt = allProducts[productTwoIndex].name;
-imageTwoElement.title = allProducts[productTwoIndex].name;
-allProducts[productOneIndex].views++;
+  imageOneElement.src = allProducts[productOneIndex].src;
+  imageOneElement.alt = allProducts[productOneIndex].name;
+  imageOneElement.title = allProducts[productOneIndex].name;
+  allProducts[productOneIndex].views++;
 
-imageThreeElement.src = allProducts[productThreeIndex].src;
-imageThreeElement.alt = allProducts[productThreeIndex].name;
-imageThreeElement.title = allProducts[productThreeIndex].name;
-allProducts[productThreeIndex].views++;
+  
+  imageTwoElement.src = allProducts[productTwoIndex].src;
+  imageTwoElement.alt = allProducts[productTwoIndex].name;
+  imageTwoElement.title = allProducts[productTwoIndex].name;
+  allProducts[productOneIndex].views++;
+
+  imageThreeElement.src = allProducts[productThreeIndex].src;
+  imageThreeElement.alt = allProducts[productThreeIndex].name;
+  imageThreeElement.title = allProducts[productThreeIndex].name;
+  allProducts[productThreeIndex].views++;
 }
 
 function handleClick(event) {
   actualClicks++;
-  var clickedProduct = event.target.name;
+  var clickedProduct = event.target.title;
   console.log(event);
-  
+
   for (var i = 0; i < allProducts.length; i++) {
     if (clickedProduct === allProducts[i].name) {
-    allProducts[i].votes++;
+      allProducts[i].votes++;
+    }
+  }
+
+  renderProducts();
+
+  if (actualClicks === maxClicksAllowed) {
+    myContainer.removeEventListener('click', handleClick);
+    for (var j = 0; j < allProducts.length; j++) {
+      var liElement = document.createElement('li');
+      liElement.textContent = `${allProducts[j].name} was viewed ${allProducts[j].views} times and clicked ${allProducts[j].votes} times`;
+      resultsList.appendChild(liElement);
+    }
   }
 }
 
 renderProducts();
-
-if (actualClicks === maxClicksAllowed) {
-  myContainer.removeEventListener('click', handleClick);
-  for (var j = 0; j < allProducts.length; j++) {
-    var liElement = document.createElement('li');
-    liElement.textContent = `${allProducts[j].name} was viewed ${allProducts[j].views} times and clicked ${allProducts[j].votes} times`;
-    resultsList.appendChild(liElement);
-  }
-}
-}
+myContainer.addEventListener('click', handleClick);
