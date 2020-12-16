@@ -10,6 +10,7 @@ main {
   
 }
 
+
 h1 {
 
 }
@@ -21,3 +22,9 @@ h3 {
 footer {
 
 } */
+
+
+img {
+  height: 300px;
+  width: 300px;
+}
