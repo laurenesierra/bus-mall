@@ -81,7 +81,6 @@ function renderProducts() {
 function handleClick(event) {
   actualClicks++;
   var clickedProduct = event.target.title;
-  console.log(event);
 
   for (var i = 0; i < allProducts.length; i++) {
     if (clickedProduct === allProducts[i].name) {
@@ -102,4 +101,59 @@ function handleClick(event) {
 }
 
 renderProducts();
+
+function renderChart() {
+  var namesArray = [];
+  var votesArray = [];
+  var viewsArray = [];
+
+  for (var i = 0; i < allProducts.length; i++){
+    namesArray.push(allGoats[i].name);
+    votesArray.push(allGoats[i].votes);
+    viewsArray.push(allGoats[i].views);
+  }
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var dataObject = {
+    type: 'bar',
+    data: {
+        labels: namesArray,
+        datasets: [{
+            label: 'Number of Votes',
+            data: votesArray,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(54, 99, 132, 1)',
+            borderWidth: 5
+        },
+        {
+          label: 'NumberOfVotes',
+          data: votesArray,
+          backroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 5
+        },
+    {
+
+      label: 'NumberOfViews',
+      data: votesArray,
+      backroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 2
+    }]
+  },
+    options: {
+      resposive: false,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+};
+
+var myChart = new Chart(ctx, dataObject);
+}
+
 myContainer.addEventListener('click', handleClick);
