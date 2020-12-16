@@ -8,6 +8,9 @@
 Used for creating chart:
 https://www.chartjs.org/docs/latest/
 
+For color picking:
+https://html-color.codes/blue 
+
 Used for CSS image Styling:
 https://css-tricks.com/using-css-for-image-borders/
 
@@ -15,3 +18,4 @@ https://css-tricks.com/using-css-for-image-borders/
  
 - Glenn Clark
 - Ryan Galloway
+- Cait Rowland
