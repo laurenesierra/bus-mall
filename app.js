@@ -24,7 +24,7 @@ function Product(name, src) {
 
 //Saves survey results to local storage
 var retrieveProducts = localStorage.getItem('products');
-if (renderProducts) {
+if (retrieveProducts) {
   allProducts = JSON.parse(retrieveProducts);
 } else {
 
